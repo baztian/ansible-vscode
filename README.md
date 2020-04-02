@@ -1,5 +1,7 @@
-Role Name
-=========
+Visual Studio Code ansible role
+===============================
+
+![CI](https://github.com/baztian/ansible-vscode/workflows/CI/badge.svg)
 
 Role to install and setup Visual Studio Code.
 
