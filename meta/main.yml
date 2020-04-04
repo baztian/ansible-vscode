@@ -2,7 +2,7 @@ galaxy_info:
   author: baztian
   role_name: vscode
   description: Role for installing visual studio code
-  license: GPLv3
+  license: MIT
   min_ansible_version: 2.0
   platforms:
   - name: Ubuntu
