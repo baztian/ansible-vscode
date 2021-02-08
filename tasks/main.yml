@@ -1,4 +1,10 @@
 ---
+- name: Update apt cache.
+  apt: update_cache=yes cache_valid_time=3600
+- name: Install dirmngr in order to be able to install the apt signing key
+  apt:
+    pkg:
+      - dirmngr
 - name: Add Microsoft apt signing key on remote server to keyring
   apt_key:
     id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
@@ -22,6 +28,12 @@
     recurse: no
   register: settings_sync_ext_find
   become: no
+- name: Install additional packages in order to be able to run the extension installation below
+# Might be obsolete with the official settings sync function
+  apt:
+    pkg:
+      - libx11-xcb1
+      - libasound2
 - name: Install code-settings-sync extension
   command: code --install-extension shan.code-settings-sync
   become: no
@@ -53,5 +65,6 @@
   copy:
      content: "{{ updated_settings }}"
      dest: "{{ user_settings_file }}"
+     mode: 0644
   become: no
   when: updated_settings is defined
