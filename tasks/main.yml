@@ -65,5 +65,6 @@
   copy:
      content: "{{ updated_settings }}"
      dest: "{{ user_settings_file }}"
+     mode: 0644
   become: no
   when: updated_settings is defined
