@@ -28,6 +28,12 @@
     recurse: no
   register: settings_sync_ext_find
   become: no
+- name: Install additional packages in order to be able to run the extension installation below
+# Might be obsolete with the official settings sync function
+  apt:
+    pkg:
+      - libx11-xcb1
+      - libasound2
 - name: Install code-settings-sync extension
   command: code --install-extension shan.code-settings-sync
   become: no
