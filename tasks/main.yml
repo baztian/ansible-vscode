@@ -1,4 +1,10 @@
 ---
+- name: Update apt cache.
+  apt: update_cache=yes cache_valid_time=3600
+- name: Install dirmngr in order to be able to install the apt signing key
+  apt:
+    pkg:
+      - dirmngr
 - name: Add Microsoft apt signing key on remote server to keyring
   apt_key:
     id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
