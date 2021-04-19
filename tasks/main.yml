@@ -5,6 +5,7 @@
   apt:
     pkg:
       - dirmngr
+      - apt-transport-https
 - name: Add Microsoft apt signing key on remote server to keyring
   apt_key:
     id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
