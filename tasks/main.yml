@@ -1,6 +1,8 @@
 ---
 - name: Update apt cache.
-  apt: update_cache=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
 - name: Install dirmngr in order to be able to install the apt signing key
   apt:
     pkg:
@@ -10,9 +12,10 @@
   apt_key:
     id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
     keyserver: keyserver.ubuntu.com
+    keyring: /etc/apt/trusted.gpg.d/microsoftpackages.gpg
 - name: Add apt repo for vs code
   apt_repository:
-    repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoftpackages.gpg] https://packages.microsoft.com/repos/vscode stable main
     # setting filename required to not collide with
     # https://github.com/microsoft/vscode/blob/master/resources/linux/debian/postinst.template
     filename: vscode
@@ -40,6 +43,7 @@
   command: code --install-extension shan.code-settings-sync
   become: no
   when: not settings_sync_ext_find.matched
+  changed_when: false
 - name: Check if settings.json exists
   stat:
     path: "{{ user_settings_file }}"
@@ -61,7 +65,7 @@
   when: not user_settings.stat.exists
 - name: Ensure existing sync.gist is set up
   set_fact:
-    updated_settings: "{{ settings | combine({'sync.gist': sync_gist }) }}"
+    updated_settings: "{{ settings | combine({'sync.gist': sync_gist}) }}"
   when: user_settings.stat.exists and settings['sync.gist'] is not defined
 - name: Write updated settings.json
   copy:
