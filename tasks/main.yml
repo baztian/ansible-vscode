@@ -37,7 +37,6 @@
   apt:
     pkg:
       - libx11-xcb1
-      - libasound2
       - libxshmfence1
 - name: Install code-settings-sync extension
   command: code --install-extension zokugun.sync-settings
