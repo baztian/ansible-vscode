@@ -10,9 +10,10 @@
   apt_key:
     id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
     keyserver: keyserver.ubuntu.com
+    keyring: /etc/apt/trusted.gpg.d/microsoftpackages.gpg
 - name: Add apt repo for vs code
   apt_repository:
-    repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+    repo: deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoftpackages.gpg] https://packages.microsoft.com/repos/vscode stable main
     # setting filename required to not collide with
     # https://github.com/microsoft/vscode/blob/master/resources/linux/debian/postinst.template
     filename: vscode
