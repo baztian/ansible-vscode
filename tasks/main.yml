@@ -1,6 +1,8 @@
 ---
 - name: Update apt cache.
-  apt: update_cache=yes cache_valid_time=3600
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
 - name: Install dirmngr in order to be able to install the apt signing key
   apt:
     pkg:
@@ -41,6 +43,7 @@
   command: code --install-extension shan.code-settings-sync
   become: no
   when: not settings_sync_ext_find.matched
+  changed_when: false
 - name: Check if settings.json exists
   stat:
     path: "{{ user_settings_file }}"
@@ -62,7 +65,7 @@
   when: not user_settings.stat.exists
 - name: Ensure existing sync.gist is set up
   set_fact:
-    updated_settings: "{{ settings | combine({'sync.gist': sync_gist }) }}"
+    updated_settings: "{{ settings | combine({'sync.gist': sync_gist}) }}"
   when: user_settings.stat.exists and settings['sync.gist'] is not defined
 - name: Write updated settings.json
   copy:
