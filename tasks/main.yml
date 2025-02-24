@@ -24,13 +24,13 @@
   apt:
     pkg:
       - code
-- name: Check whether code-settings-sync extension installed
+- name: Check whether sync-settings extension installed
   find:
     paths: "~/.vscode/extensions"
-    patterns: "shan.code-settings-sync*"
+    patterns: "zokugun.sync-settings*"
     file_type: directory
     recurse: no
-  register: settings_sync_ext_find
+  register: sync_settings_ext_find
   become: no
 - name: Install additional packages in order to be able to run the extension installation below
 # Might be obsolete with the official settings sync function
@@ -40,37 +40,7 @@
       - libasound2
       - libxshmfence1
 - name: Install code-settings-sync extension
-  command: code --install-extension shan.code-settings-sync
+  command: code --install-extension zokugun.sync-settings
   become: no
-  when: not settings_sync_ext_find.matched
+  when: not sync_settings_ext_find.matched
   changed_when: false
-- name: Check if settings.json exists
-  stat:
-    path: "{{ user_settings_file }}"
-  register: user_settings
-  become: no
-- name: Slurp user settings.json
-  slurp:
-    src: "{{ user_settings.stat.path }}"
-  register: user_settings_json
-  when: user_settings.stat.exists
-- name: Convert user settings.json to ansible var
-  set_fact:
-    settings: "{{ user_settings_json['content'] | b64decode }}"
-  when: user_settings.stat.exists
-- name: Ensure empty config with sync.gist set up
-  set_fact:
-    updated_settings:
-      sync.gist: "{{ sync_gist }}"
-  when: not user_settings.stat.exists
-- name: Ensure existing sync.gist is set up
-  set_fact:
-    updated_settings: "{{ settings | combine({'sync.gist': sync_gist}) }}"
-  when: user_settings.stat.exists and settings['sync.gist'] is not defined
-- name: Write updated settings.json
-  copy:
-     content: "{{ updated_settings }}"
-     dest: "{{ user_settings_file }}"
-     mode: 0644
-  become: no
-  when: updated_settings is defined

@@ -5,6 +5,12 @@ vscode ansible role
 
 Ansible role to install and setup Visual Studio Code.
 
+[Sync Settings
+Extension](https://open-vsx.org/extension/zokugun/sync-settings) is
+installed.
+
+    > Sync Settings: Open the repository settings
+
 Example Playbook
 ----------------
 
